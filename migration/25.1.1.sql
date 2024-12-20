@@ -24,8 +24,10 @@ CREATE TABLE bids (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id BIGINT,
     contract_id BIGINT,
+    transaction_id BIGINT,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (contract_id) REFERENCES contracts(id)
+    FOREIGN KEY (contract_id) REFERENCES contracts(id),
+    FOREIGN KEY (transaction_id) REFERENCES transactions(id)
 );
 
 CREATE TABLE resolution (
@@ -41,6 +43,17 @@ CREATE TABLE resolution (
 CREATE TABLE wallet (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,
-    amount DOUBLE PRECISION NOT NULL,
+    balance DOUBLE PRECISION NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE transactions (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    amount DOUBLE PRECISION NOT NULL,
+    type VARCHAR(10) NOT NULL, -- 'debit' or 'credit'
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
